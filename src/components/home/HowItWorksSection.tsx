@@ -72,7 +72,7 @@ export function HowItWorksSection() {
     const [tab, setTab] = useState<'buyers' | 'sellers'>('buyers');
 
     return (
-        <section className="py-24 bg-white overflow-hidden">
+        <section className="pt-24 pb-12 bg-white overflow-hidden">
             <div className="container mx-auto px-4">
 
                 {/* Section Header */}
