@@ -17,3 +17,14 @@ export interface Listing {
 }
 
 export type CreateListingInput = Omit<Listing, 'id' | 'user_id' | 'created_at' | 'status'>;
+
+export interface ListingProof {
+    id: string;
+    listing_id: string;
+    uploaded_by: string;
+    proof_type: 'revenue' | 'traffic' | 'ownership' | 'other';
+    source: string;
+    file_url: string;
+    notes?: string;
+    created_at: string;
+}

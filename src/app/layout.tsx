@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google"; // or import local if needed, but google font is better
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
+import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,14 +19,15 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={inter.className}>
+            <body className={cn( // Modified body className
+                "min-h-screen bg-background font-sans antialiased",
+                inter.className
+            )}>
                 <Navbar />
-                <main className="min-h-screen bg-[#fdfbf7] pb-20">
+                <main className="min-h-screen"> {/* Modified main className */}
                     {children}
                 </main>
-                <footer className="border-t-2 border-black bg-white py-8 text-center">
-                    <p className="font-bold">© {new Date().getFullYear()} MarketX Inc. Not a real company.</p>
-                </footer>
+                <Footer /> {/* Replaced footer tag with Footer component */}
             </body>
         </html>
     );

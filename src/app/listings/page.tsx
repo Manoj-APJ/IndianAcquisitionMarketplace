@@ -2,6 +2,7 @@ import { ListingCard } from "@/components/ListingCard";
 import { Button } from "@/components/ui/Button";
 import { Search } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { getFavoriteIds } from "@/app/actions/favorites";
 
 // Force dynamic rendering so new listings appear
 export const revalidate = 0;
@@ -12,6 +13,10 @@ export default async function ListingsPage({
     searchParams: { [key: string]: string | string[] | undefined };
 }) {
     const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    // Fetch favorites if user is logged in
+    const favoriteIds = user ? await getFavoriteIds() : [];
 
     // Basic filtering logic (could be expanded)
     let query = supabase
@@ -21,8 +26,13 @@ export default async function ListingsPage({
         .order('created_at', { ascending: false });
 
     const { data: listings } = await query;
-
     const displayListings = listings && listings.length > 0 ? listings : [];
+
+    // Fetch proof indicator for these listings
+    const { data: proofIndicators } = await supabase
+        .from('listing_proofs')
+        .select('listing_id, proof_type')
+        .in('listing_id', displayListings.map(l => l.id));
 
     return (
         <div className="container mx-auto px-4 py-12">
@@ -31,8 +41,8 @@ export default async function ListingsPage({
                 <p className="text-xl text-gray-600">Discover profitable micro-SaaS, newsletters, and communities.</p>
             </div>
 
-            {/* Filters (Visual Only for MVP - funcionality would go here) */}
-            <section className="mb-12 border-2 border-black bg-white p-6 shadow-neo sticky top-4 z-20">
+            {/* Filters (Visual Only for MVP) */}
+            <section className="mb-12 border-2 border-black bg-white p-6 shadow-neo sticky top-24 z-20">
                 <div className="flex flex-col md:flex-row gap-6 items-end">
                     <div className="flex-1 w-full">
                         <label className="block text-sm font-bold uppercase mb-2">Search</label>
@@ -85,9 +95,19 @@ export default async function ListingsPage({
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {displayListings.map((listing) => (
-                            <ListingCard key={listing.id} listing={listing} />
-                        ))}
+                        {displayListings.map((listing) => {
+                            const listingProofs = proofIndicators?.filter(p => p.listing_id === listing.id) || [];
+                            return (
+                                <ListingCard
+                                    key={listing.id}
+                                    listing={listing}
+                                    isFavorite={favoriteIds.includes(listing.id)}
+                                    isLoggedIn={!!user}
+                                    hasRevenueProof={listingProofs.some(p => p.proof_type === 'revenue')}
+                                    hasTrafficProof={listingProofs.some(p => p.proof_type === 'traffic')}
+                                />
+                            );
+                        })}
                     </div>
                 )}
             </section>

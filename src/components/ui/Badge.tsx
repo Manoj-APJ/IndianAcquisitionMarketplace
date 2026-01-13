@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 interface BadgeProps {
     children: React.ReactNode;
     className?: string;
-    color?: "blue" | "green" | "yellow" | "gray";
+    color?: "blue" | "green" | "yellow" | "gray" | "amber";
 }
 
 export const Badge: React.FC<BadgeProps> = ({ children, className, color = "gray" }) => {
@@ -17,6 +17,7 @@ export const Badge: React.FC<BadgeProps> = ({ children, className, color = "gray
                     "bg-green-100": color === "green",
                     "bg-yellow-100": color === "yellow",
                     "bg-gray-100": color === "gray",
+                    "bg-amber-400": color === "amber",
                 },
                 className
             )}

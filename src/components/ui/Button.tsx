@@ -20,7 +20,7 @@ export const Button: FC<ButtonProps> = ({
                 {
                     "bg-primary text-white hover:bg-blue-700": variant === "primary",
                     "bg-white text-black hover:bg-gray-50": variant === "secondary",
-                    "bg-transparent border-2 border-black text-black hover:bg-black hover:text-white": variant === "outline",
+                    "bg-transparent border-2 border-black text-black hover:bg-gray-100": variant === "outline",
 
                     "h-9 px-4": size === "sm",
                     "h-12 px-8 text-base": size === "md",

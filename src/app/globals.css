@@ -13,7 +13,8 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 221.2 83.2% 53.3%; /* Electric Blue */
+    --primary: 221.2 83.2% 53.3%;
+    /* Electric Blue */
     --primary-foreground: 210 40% 98%;
 
     --secondary: 210 40% 96.1%;
@@ -28,11 +29,13 @@
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 0 0% 0%; /* Black borders */
+    --border: 0 0% 0%;
+    /* Black borders */
     --input: 214.3 31.8% 91.4%;
     --ring: 221.2 83.2% 53.3%;
 
-    --radius: 0px; /* Sharp edges */
+    --radius: 0px;
+    /* Sharp edges */
   }
 
   body {
@@ -45,7 +48,7 @@
 }
 
 .neo-shadow {
-  @apply shadow-[4px_4px_0px_0px_rgba(0,0,0,1)];
+  @apply shadow-neo;
 }
 
 .neo-button {

@@ -1,121 +1,170 @@
 import { Button } from "@/components/ui/Button";
+import Link from "next/link";
+import { createClient } from "@/lib/supabase/server";
+import { TRUST_METRICS } from "@/lib/landing-data-v2";
+import {
+    CheckCircle2,
+    MessageCircle,
+    ShieldCheck,
+    BadgeDollarSign,
+    Lock
+} from "lucide-react";
+import { WhoItsForSection } from "@/components/home/WhoItsForSection";
+import { AssetCategoriesSection } from "@/components/home/AssetCategoriesSection";
 import { ComparisonSection } from "@/components/home/ComparisonSection";
 import { HowItWorksSection } from "@/components/home/HowItWorksSection";
 import { FAQSection } from "@/components/home/FAQSection";
-import { CheckCircle2, DollarSign, Zap } from "lucide-react";
-import Link from "next/link";
+import { BlogGrid } from "@/components/home/BlogGrid";
 
-export const revalidate = 0; // Dynamic
+export const revalidate = 0;
 
-export default function Home() {
+export default async function Home() {
+    const supabase = createClient();
+
+    const { data: blogs } = await supabase
+        .from("blogs")
+        .select("*")
+        .eq("status", "published")
+        .order("published_at", { ascending: false })
+        .limit(3);
+
     return (
         <div className="min-h-screen bg-white">
-            {/* 1. High-Conversion Hero */}
-            <section className="relative pt-20 pb-32 overflow-hidden border-b-2 border-black bg-[#fafafa]">
-                <div className="container mx-auto px-4 relative z-10 text-center">
 
-                    <div className="inline-flex items-center gap-2 bg-green-100 border-2 border-green-600 text-green-800 px-4 py-2 font-black text-sm uppercase mb-8 shadow-neo-sm transform -rotate-2">
-                        <DollarSign size={16} strokeWidth={3} /> 0% Commission Fees
+            {/* HERO */}
+            <section className="relative pt-24 pb-32 border-b-2 border-black bg-white overflow-hidden">
+                <div className="container mx-auto px-4 text-center max-w-6xl relative z-10">
+
+                    {/* Badge */}
+                    <div className="inline-flex items-center gap-2 bg-amber-100 border-2 border-black px-4 py-2 font-black text-xs uppercase mb-8 shadow-neo-sm">
+                        <Lock size={14} />
+                        Designed for Serious Buyer–Seller Discussions.
                     </div>
 
-                    <h1 className="text-5xl md:text-8xl font-black tracking-tighter mb-8 leading-[0.9]">
-                        Sell your SaaS. <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Keep 100% Profit.</span>
+                    {/* Headline */}
+                    <h1 className="text-5xl md:text-8xl font-black tracking-tighter mb-8 leading-[0.95]">
+                        Buy & Sell <br className="hidden md:block" />
+                        <span className="text-blue-900 border-b-4 border-amber-400">
+                            Real Digital Businesses
+                        </span>
                     </h1>
 
-                    <p className="text-xl md:text-3xl text-gray-600 font-medium mb-12 max-w-3xl mx-auto leading-relaxed">
-                        The only acquisition marketplace that doesn't take a cut of your exit.
-                        Direct deals. Verified buyers. Bank-level security.
+                    {/* Subheadline */}
+                    <p className="text-xl md:text-2xl text-gray-600 font-medium mb-12 max-w-4xl mx-auto">
+                        SaaS, content sites, newsletters, e-commerce stores, mobile apps & more.
+                        <br className="hidden md:block" />
+                        Proof-based listings, NDA-gated data, admin-approved deals.
                     </p>
 
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+                    {/* CTAs */}
+                    <div className="flex flex-col sm:flex-row justify-center gap-6 mb-14">
                         <Link href="/listings">
-                            <Button size="lg" className="h-16 px-10 text-xl shadow-neo border-2 border-black">Browse Active Listings</Button>
+                            <Button className="h-16 px-10 text-xl font-black bg-amber-500 text-black border-2 border-black shadow-neo hover:translate-x-1 hover:-translate-y-1 transition-all">
+                                Browse Listings
+                            </Button>
                         </Link>
                         <Link href="/sell">
-                            <Button size="lg" variant="outline" className="h-16 px-10 text-xl border-2 border-black bg-white hover:bg-gray-50">Sell a Business</Button>
+                            <Button
+                                variant="outline"
+                                className="h-16 px-10 text-xl font-black border-2 border-black"
+                            >
+                                List Your Business
+                            </Button>
                         </Link>
                     </div>
 
-                    <div className="mt-16 flex flex-wrap justify-center gap-8 text-sm font-bold text-gray-500 uppercase tracking-wide">
-                        <span className="flex items-center gap-2"><CheckCircle2 className="text-green-500" /> No Success Fees</span>
-                        <span className="flex items-center gap-2"><CheckCircle2 className="text-green-500" /> Buyer Verification</span>
-                        <span className="flex items-center gap-2"><CheckCircle2 className="text-green-500" /> Instant Deal Rooms</span>
+                    {/* Trust bullets */}
+                    <div className="flex flex-wrap justify-center gap-8 text-sm md:text-base font-bold text-gray-700">
+                        <span className="flex items-center gap-2">
+                            <ShieldCheck size={20} strokeWidth={3} />
+                            NDA-protected private data
+                        </span>
+                        <span className="flex items-center gap-2">
+                            <CheckCircle2 size={20} strokeWidth={3} />
+                            Admin-verified listings
+                        </span>
+                        <span className="flex items-center gap-2">
+                            <MessageCircle size={20} strokeWidth={3} />
+                            Direct buyer–seller chat
+                        </span>
+                        <span className="flex items-center gap-2">
+                            <BadgeDollarSign size={20} strokeWidth={3} />
+                            No commissions
+                        </span>
                     </div>
                 </div>
 
-                {/* Abstract Background Decoration */}
-                <div className="absolute top-0 left-0 w-full h-full opacity-30 pointer-events-none"
-                    style={{ backgroundImage: 'radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.1) 0%, transparent 20%), radial-gradient(circle at 90% 80%, rgba(37, 99, 235, 0.1) 0%, transparent 20%)' }}>
-                </div>
+                <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-5 pointer-events-none" />
             </section>
 
-            {/* 2. Value Proposition Grid */}
-            <section className="py-24 bg-black text-white border-b-2 border-black">
+            {/* TRUST METRICS */}
+            <section className="bg-black text-white border-b-2 border-black py-12">
                 <div className="container mx-auto px-4">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-                        <div className="text-center p-6 border border-white/20 bg-white/5">
-                            <div className="w-16 h-16 bg-blue-600 border-2 border-white flex items-center justify-center mx-auto mb-6 text-white rotate-3">
-                                <DollarSign size={32} strokeWidth={3} />
+                    <div className="flex flex-col md:flex-row gap-8 divide-y md:divide-y-0 md:divide-x divide-gray-800">
+                        {TRUST_METRICS.map((metric) => (
+                            <div key={metric.label} className="flex-1 text-center pt-6 md:pt-0">
+                                <p className="text-4xl md:text-5xl font-black text-amber-500">
+                                    {metric.value}
+                                </p>
+                                <p className="text-sm font-bold uppercase tracking-widest text-gray-400">
+                                    {metric.label}
+                                </p>
                             </div>
-                            <h3 className="text-2xl font-black mb-4">Zero Commissions</h3>
-                            <p className="text-gray-400">Other marketplaces take 10-15%. We take 0%. Your exit money belongs to you.</p>
-                        </div>
-                        <div className="text-center p-6 border border-white/20 bg-white/5">
-                            <div className="w-16 h-16 bg-green-500 border-2 border-white flex items-center justify-center mx-auto mb-6 text-white -rotate-2">
-                                <Zap size={32} strokeWidth={3} />
-                            </div>
-                            <h3 className="text-2xl font-black mb-4">Speed to Close</h3>
-                            <p className="text-gray-400">Direct connection to verified buyers means deals close in days, not months.</p>
-                        </div>
-                        <div className="text-center p-6 border border-white/20 bg-white/5">
-                            <div className="w-16 h-16 bg-orange-500 border-2 border-white flex items-center justify-center mx-auto mb-6 text-white rotate-2">
-                                <CheckCircle2 size={32} strokeWidth={3} />
-                            </div>
-                            <h3 className="text-2xl font-black mb-4">Vetted Quality</h3>
-                            <p className="text-gray-400">No starter sites. We only list profitable, operational businesses.</p>
-                        </div>
+                        ))}
                     </div>
                 </div>
             </section>
 
-            {/* 3. Social Proof / Ticker (Visual placeholder) */}
-            <div className="py-6 border-b-2 border-black bg-yellow-300 overflow-hidden">
-                <div className="flex justify-center items-center gap-12 font-black text-2xl uppercase tracking-widest whitespace-nowrap opacity-80">
-                    <span>SaaS</span> • <span>Newsletters</span> • <span>Communities</span> • <span>E-commerce</span> • <span>Plugins</span> • <span>Mobile Apps</span> • <span>SaaS</span>
-                </div>
-            </div>
-
-            {/* HOW IT WORKS */}
+            <WhoItsForSection />
+            <AssetCategoriesSection />
             <HowItWorksSection />
-
-            {/* COMPARISON */}
             <ComparisonSection />
 
-            {/* CTA Break */}
-            <section className="py-24 bg-blue-600 text-white text-center border-y-2 border-black">
-                <div className="container mx-auto px-4">
-                    <h2 className="text-4xl md:text-6xl font-black mb-8">Stop paying 15% fees.</h2>
-                    <Link href="/sell">
-                        <Button size="lg" className="h-20 px-12 text-2xl bg-white text-black border-2 border-black hover:bg-gray-100 hover:scale-105 transition-transform shadow-neo">
-                            List Your Business Free
-                        </Button>
-                    </Link>
-                    <p className="mt-6 font-bold opacity-80 uppercase tracking-widest text-sm">Limited time offer</p>
+            {/* PRICING SIGNAL */}
+            <section className="py-20 bg-gray-50 border-t-2 border-black text-center">
+                <h2 className="text-4xl md:text-5xl font-black mb-6">
+                    Simple, transparent pricing
+                </h2>
+                <p className="text-xl text-gray-600 mb-10">
+                    No commissions. No hidden fees.
+                </p>
+                <div className="flex justify-center gap-6 flex-wrap">
+                    <div className="border-2 border-black px-10 py-6 font-black text-xl">
+                        $19 / year
+                    </div>
+                    <div className="border-2 border-black px-10 py-6 font-black text-xl bg-amber-100">
+                        $49 lifetime
+                    </div>
                 </div>
             </section>
 
-            {/* FAQ */}
-            <FAQSection />
-
-            {/* Final Footer CTA */}
-            <section className="py-20 bg-white text-center">
-                <h2 className="text-4xl font-black mb-6">Still have questions?</h2>
-                <p className="text-gray-600 mb-10 text-xl">
-                    Our support team is run by founders, for founders.
+            {/* FINAL CTA */}
+            <section className="py-24 bg-blue-900 text-white text-center border-t-2 border-black">
+                <h2 className="text-4xl md:text-6xl font-black mb-8">
+                    Close deals with confidence
+                </h2>
+                <p className="text-gray-300 text-xl mb-12">
+                    Safer than open marketplaces. Built for serious buyers and sellers.
                 </p>
-                <Button variant="outline" size="lg">Contact Support</Button>
+                <div className="flex justify-center gap-6 flex-wrap">
+                    <Link href="/listings">
+                        <Button className="h-20 px-12 text-2xl font-black bg-amber-500 text-black border-2 border-white">
+                            Browse Listings
+                        </Button>
+                    </Link>
+                    <Link href="/sell">
+                        <Button
+                            variant="outline"
+                            className="h-20 px-12 text-2xl font-black border-2 border-white text-white"
+                        >
+                            List Your Business
+                        </Button>
+                    </Link>
+                </div>
             </section>
+
+            <BlogGrid blogs={blogs || []} />
+            <FAQSection />
         </div>
     );
 }
