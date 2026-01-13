@@ -1,6 +1,6 @@
 import { ListingCard } from "@/components/ListingCard";
+import { ListingsFilter } from "@/components/ListingsFilter";
 import { Button } from "@/components/ui/Button";
-import { Search } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getFavoriteIds } from "@/app/actions/favorites";
 
@@ -15,70 +15,63 @@ export default async function ListingsPage({
     const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
+    // Parse filters from URL
+    const q = typeof searchParams.q === 'string' ? searchParams.q : '';
+    const revenueRange = typeof searchParams.revenue === 'string' ? searchParams.revenue : 'any';
+    const assetType = typeof searchParams.type === 'string' ? searchParams.type : 'any';
+
     // Fetch favorites if user is logged in
     const favoriteIds = user ? await getFavoriteIds() : [];
 
-    // Basic filtering logic (could be expanded)
+    // 1. Build Base Query
     let query = supabase
         .from('listings')
         .select('*')
-        .eq('status', 'live')
-        .order('created_at', { ascending: false });
+        .eq('status', 'live');
+
+    // 2. Apply Keyword Search
+    if (q) {
+        query = query.or(`title.ilike.%${q}%,short_description.ilike.%${q}%,description.ilike.%${q}%`);
+    }
+
+    // 3. Apply Revenue Filter
+    if (revenueRange === '0-1000') {
+        query = query.gte('monthly_revenue', 0).lte('monthly_revenue', 1000);
+    } else if (revenueRange === '1000-5000') {
+        query = query.gt('monthly_revenue', 1000).lte('monthly_revenue', 5000);
+    } else if (revenueRange === '5000-any') {
+        query = query.gt('monthly_revenue', 5000);
+    }
+
+    // 4. Apply Asset Type Filter
+    if (assetType !== 'any') {
+        query = query.eq('listing_type', assetType);
+    }
+
+    // 5. Order and Execute
+    query = query.order('created_at', { ascending: false });
 
     const { data: listings } = await query;
     const displayListings = listings && listings.length > 0 ? listings : [];
 
     // Fetch proof indicator for these listings
-    const { data: proofIndicators } = await supabase
-        .from('listing_proofs')
-        .select('listing_id, proof_type')
-        .in('listing_id', displayListings.map(l => l.id));
+    let proofIndicators: any[] = [];
+    if (displayListings.length > 0) {
+        const { data } = await supabase
+            .from('listing_proofs')
+            .select('listing_id, proof_type')
+            .in('listing_id', displayListings.map(l => l.id));
+        proofIndicators = data || [];
+    }
 
     return (
         <div className="container mx-auto px-4 py-12">
             <div className="mb-12 text-center">
-                <h1 className="text-4xl md:text-5xl font-black mb-4">Browse Active Listings</h1>
-                <p className="text-xl text-gray-600">Discover profitable micro-SaaS, newsletters, and communities.</p>
+                <h1 className="text-4xl md:text-5xl font-black mb-4 uppercase tracking-tighter">Browse Active Listings</h1>
+                <p className="text-xl text-gray-600 font-bold">Discover profitable micro-SaaS, newsletters, and communities.</p>
             </div>
 
-            {/* Filters (Visual Only for MVP) */}
-            <section className="mb-12 border-2 border-black bg-white p-6 shadow-neo sticky top-24 z-20">
-                <div className="flex flex-col md:flex-row gap-6 items-end">
-                    <div className="flex-1 w-full">
-                        <label className="block text-sm font-bold uppercase mb-2">Search</label>
-                        <div className="relative">
-                            <input
-                                type="text"
-                                placeholder="Search assets..."
-                                className="w-full border-2 border-black h-12 px-4 pl-10 font-bold focus:outline-none focus:ring-4 ring-blue-600/20 transition-all"
-                            />
-                            <Search className="absolute left-3 top-3 text-gray-400" />
-                        </div>
-                    </div>
-
-                    <div className="w-full md:w-64">
-                        <label className="block text-sm font-bold uppercase mb-2">Revenue Range</label>
-                        <select className="w-full border-2 border-black h-12 px-4 font-bold bg-white focus:outline-none">
-                            <option>Any Revenue</option>
-                            <option>$0 - $1k/mo</option>
-                            <option>$1k - $5k/mo</option>
-                            <option>$5k+/mo</option>
-                        </select>
-                    </div>
-
-                    <div className="w-full md:w-64">
-                        <label className="block text-sm font-bold uppercase mb-2">Asset Type</label>
-                        <select className="w-full border-2 border-black h-12 px-4 font-bold bg-white focus:outline-none">
-                            <option>All Types</option>
-                            <option>SaaS</option>
-                            <option>Newsletter</option>
-                            <option>Community</option>
-                        </select>
-                    </div>
-
-                    <Button className="w-full md:w-auto">Filter</Button>
-                </div>
-            </section>
+            <ListingsFilter />
 
             {/* Listings Grid */}
             <section>
