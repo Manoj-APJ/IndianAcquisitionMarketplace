@@ -27,7 +27,10 @@ export default function SellPage() {
         return (
             <div className="container mx-auto px-4 py-20 max-w-2xl text-center">
                 <div className="bg-green-50, border-2 border-black p-12 shadow-neo flex flex-col items-center">
-                    <CheckCircle2 size={64} className="text-green-500 mb-6" />
+                    {/* <CheckCircle2 size={64} className="text-green-500 mb-6" /> */}
+                    <div className="mb-8 w-64 h-64 relative bg-white border-2 border-black p-2 shadow-neo-sm rotate-1">
+                        <img src="/submitted-review.png" alt="Submitted for Review" className="w-full h-full object-contain" />
+                    </div>
                     <h1 className="text-4xl font-black mb-4">Listing Submitted!</h1>
                     <p className="text-xl text-gray-600 mb-8">
                         Your asset has been submitted for review. Our team will verify your revenue and traffic stats shortly.
