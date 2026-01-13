@@ -3,7 +3,8 @@ import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import { ListingCard } from "@/components/ListingCard";
-import { User, Heart, Settings, LogOut, LayoutDashboard } from "lucide-react";
+import { User, Heart, Settings, LogOut, LayoutDashboard, Inbox, DollarSign, MessageCircle } from "lucide-react";
+import { OfferActionButtons } from "@/components/OfferActionButtons";
 
 export const revalidate = 0;
 
@@ -44,6 +45,28 @@ export default async function ProfilePage() {
     // Get Profile Role
     const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single();
 
+    // --- NEW FETCHES ---
+    // Fetch Conversations
+    const { data: conversations } = await supabase
+        .from("conversations")
+        .select(`*, listing:listings(title), buyer:buyer_id(email), seller:seller_id(email)`)
+        .or(`buyer_id.eq.${user.id},seller_id.eq.${user.id}`)
+        .order("created_at", { ascending: false });
+
+    // Fetch Offers Sent
+    const { data: offersSent } = await supabase
+        .from("offers")
+        .select(`*, listing:listings(title)`)
+        .eq("buyer_id", user.id)
+        .order("created_at", { ascending: false });
+
+    // Fetch Offers Received
+    const { data: offersReceived } = await supabase
+        .from("offers")
+        .select(`*, listing:listings(title), buyer:buyer_id(email)`)
+        .eq("seller_id", user.id)
+        .order("created_at", { ascending: false });
+
     return (
         <div className="min-h-screen bg-white py-12">
             <div className="container mx-auto px-4">
@@ -79,6 +102,100 @@ export default async function ProfilePage() {
 
                 {/* Content Tabs / Sections */}
                 <div className="space-y-16">
+
+                    {/* Active Conversations */}
+                    {conversations && conversations.length > 0 && (
+                        <section>
+                            <h2 className="text-2xl font-black flex items-center gap-2 mb-8 uppercase tracking-tight">
+                                Active Conversations <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">{conversations.length}</span>
+                            </h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {conversations.map((conv: any) => {
+                                    const otherEmail = conv.buyer_id === user.id ? conv.seller?.email : conv.buyer?.email;
+                                    return (
+                                        <Link href={`/messages/${conv.id}`} key={conv.id}>
+                                            <div className="border-2 border-black p-6 bg-white shadow-neo hover:translate-x-1 hover:-translate-y-1 transition-all">
+                                                <h3 className="font-black uppercase text-sm mb-1">{conv.listing?.title}</h3>
+                                                <p className="text-xs font-bold text-gray-500 mb-4">With: {otherEmail}</p>
+                                                <Button size="sm" variant="outline" className="w-full border-2 border-black font-bold">Open Chat</Button>
+                                            </div>
+                                        </Link>
+                                    );
+                                })}
+                            </div>
+                        </section>
+                    )}
+
+                    {/* Offers Received */}
+                    {offersReceived && offersReceived.length > 0 && (
+                        <section>
+                            <h2 className="text-2xl font-black flex items-center gap-2 mb-8 uppercase tracking-tight text-blue-900 border-b-2 border-dashed border-blue-900/20 pb-2 w-fit">
+                                Offers Received <DollarSign size={20} />
+                            </h2>
+                            <div className="space-y-4">
+                                {offersReceived.map((offer: any) => (
+                                    <div key={offer.id} className="border-2 border-black p-6 bg-blue-50/50 shadow-neo-sm">
+                                        <div className="flex flex-wrap justify-between items-start gap-4">
+                                            <div>
+                                                <h3 className="font-black uppercase text-lg">{offer.listing?.title}</h3>
+                                                <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">From: {offer.buyer?.email}</p>
+                                                <div className="mt-4">
+                                                    <span className="text-3xl font-black text-blue-600">${offer.amount.toLocaleString()}</span>
+                                                </div>
+                                                {offer.message && (
+                                                    <p className="mt-4 p-3 bg-white border-2 border-black/10 text-sm font-medium italic text-gray-600">"{offer.message}"</p>
+                                                )}
+                                            </div>
+                                            <div className="text-right">
+                                                <span className={`px-3 py-1 text-xs font-black uppercase border-2 ${offer.status === 'accepted' ? 'bg-green-100 text-green-800 border-green-800' :
+                                                        offer.status === 'rejected' ? 'bg-red-100 text-red-800 border-red-800' :
+                                                            offer.status === 'withdrawn' ? 'bg-gray-100 text-gray-500 border-gray-500' :
+                                                                'bg-yellow-100 text-yellow-800 border-yellow-800'
+                                                    }`}>
+                                                    {offer.status}
+                                                </span>
+                                                <div className="mt-4">
+                                                    <OfferActionButtons offer={offer} isSeller={true} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
+
+                    {/* Offers Sent */}
+                    {offersSent && offersSent.length > 0 && (
+                        <section>
+                            <h2 className="text-2xl font-black flex items-center gap-2 mb-8 uppercase tracking-tight text-gray-500">
+                                Offers Sent
+                            </h2>
+                            <div className="space-y-4">
+                                {offersSent.map((offer: any) => (
+                                    <div key={offer.id} className="border-2 border-black p-6 bg-gray-50 shadow-neo-sm opacity-90 hover:opacity-100 transition-opacity">
+                                        <div className="flex justify-between items-center">
+                                            <div>
+                                                <h3 className="font-black uppercase text-sm mb-1">{offer.listing?.title}</h3>
+                                                <p className="text-2xl font-black">${offer.amount.toLocaleString()}</p>
+                                                {offer.message && <p className="text-xs text-gray-500 mt-1 italic max-w-md truncate">"{offer.message}"</p>}
+                                            </div>
+                                            <div className="text-right">
+                                                <span className={`px-2 py-1 text-[10px] font-black uppercase border-2 ${offer.status === 'accepted' ? 'bg-green-500 text-white border-green-700' : 'bg-white border-black text-gray-500'
+                                                    }`}>
+                                                    {offer.status}
+                                                </span>
+                                                <div className="mt-2">
+                                                    <OfferActionButtons offer={offer} isSeller={false} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
+
 
                     {/* My Listings */}
                     <section>

@@ -28,6 +28,7 @@ export function Footer() {
                         <h4 className="font-black text-lg mb-6 uppercase">Marketplace</h4>
                         <ul className="space-y-3 font-medium text-gray-600">
                             <li><Link href="/listings" className="hover:text-black hover:underline">Browse Listings</Link></li>
+                            <li><Link href="/messages" className="hover:text-black hover:underline">Messages / Chat</Link></li>
                             <li><Link href="/sell" className="hover:text-black hover:underline">Sell Your Business</Link></li>
                             <li><Link href="/how-it-works" className="hover:text-black hover:underline">How It Works</Link></li>
                             <li><Link href="/pricing" className="hover:text-black hover:underline">Pricing</Link></li>

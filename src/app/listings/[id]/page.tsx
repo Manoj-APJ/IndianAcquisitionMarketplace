@@ -6,6 +6,8 @@ import { createClient } from "@/lib/supabase/server";
 import { NDAForm, NDAStatus } from "@/components/NDAForm";
 import { FavoriteButton } from "@/components/FavoriteButton";
 import { getFavoriteIds } from "@/app/actions/favorites";
+import { MessageSellerButton } from "@/components/MessageSellerButton";
+import { MakeOfferButton } from "@/components/MakeOfferButton";
 import {
     ArrowLeft,
     CheckCircle2,
@@ -262,9 +264,10 @@ export default async function ListingPage({ params }: PageProps) {
                                 <Lock size={20} className="mr-2" /> Locked Data
                             </Button>
                         ) : (
-                            <Button className="w-full text-lg h-16 mb-4 uppercase font-black shadow-neo border-2 border-black hover:translate-x-1 hover:-translate-y-1 transition-all">
-                                Contact Seller
-                            </Button>
+                            <>
+                                <MessageSellerButton listingId={publicListing.id} />
+                                <MakeOfferButton listingId={publicListing.id} askingPrice={publicListing.price} />
+                            </>
                         )}
 
                         <p className="text-center text-[10px] font-black text-gray-400 uppercase tracking-widest">

@@ -15,6 +15,7 @@ import { ComparisonSection } from "@/components/home/ComparisonSection";
 import { HowItWorksSection } from "@/components/home/HowItWorksSection";
 import { FAQSection } from "@/components/home/FAQSection";
 import { BlogGrid } from "@/components/home/BlogGrid";
+import { ListingCard } from "@/components/ListingCard";
 
 export const revalidate = 0;
 
@@ -27,6 +28,20 @@ export default async function Home() {
         .eq("status", "published")
         .order("published_at", { ascending: false })
         .limit(3);
+
+    // Fetch Top 3 Listings for teaser (only if not logged in)
+    let featuredListings: any[] = [];
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        const { data } = await supabase
+            .from("listings")
+            .select("*")
+            .eq("status", "live")
+            .order("created_at", { ascending: false })
+            .limit(3);
+        featuredListings = data || [];
+    }
 
     return (
         <div className="min-h-screen bg-white">
@@ -114,6 +129,35 @@ export default async function Home() {
                     </div>
                 </div>
             </section>
+
+            {/* FEATURED LISTINGS (Logged Out Only) */}
+            {featuredListings.length > 0 && (
+                <section className="py-20 bg-gray-50 border-b-2 border-black">
+                    <div className="container mx-auto px-4">
+                        <div className="text-center mb-12">
+                            <h2 className="text-4xl font-black mb-4 uppercase tracking-tighter">New Opportunities</h2>
+                            <p className="text-gray-600 font-bold max-w-2xl mx-auto">
+                                Fresh profitable businesses just added to the marketplace. Log in to view full details and make offers.
+                            </p>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {featuredListings.map(listing => (
+                                <ListingCard
+                                    key={listing.id}
+                                    listing={listing}
+                                    isLoggedIn={false}
+                                    isFavorite={false}
+                                />
+                            ))}
+                        </div>
+                        <div className="text-center mt-12">
+                            <Link href="/login">
+                                <Button className="h-14 px-8 font-black uppercase shadow-neo">View All Listings</Button>
+                            </Link>
+                        </div>
+                    </div>
+                </section>
+            )}
 
             <WhoItsForSection />
             <AssetCategoriesSection />

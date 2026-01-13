@@ -15,6 +15,14 @@ export default async function ListingsPage({
     const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
+    if (!user) {
+        // Redirect to login with return URL
+        // Using a simpler approach: redirect to login
+        // But Next.js 'redirect' throws an error, so it stops execution.
+        const { redirect } = require("next/navigation");
+        redirect("/login?next=/listings");
+    }
+
     // Parse filters from URL
     const q = typeof searchParams.q === 'string' ? searchParams.q : '';
     const revenueRange = typeof searchParams.revenue === 'string' ? searchParams.revenue : 'any';

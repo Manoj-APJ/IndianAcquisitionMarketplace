@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button } from "./ui/Button";
 import { createClient } from "@/lib/supabase/server";
-import { User, LogOut } from "lucide-react";
+import { User, LogOut, MessageCircle } from "lucide-react";
 
 export const Navbar = async () => {
     const supabase = createClient();
@@ -36,6 +36,12 @@ export const Navbar = async () => {
                                 <Button variant="outline" size="sm" className="h-9 border-2 border-black font-bold flex items-center gap-2">
                                     <User size={16} />
                                     Profile
+                                </Button>
+                            </Link>
+                            <Link href="/messages">
+                                <Button variant="outline" size="sm" className="h-9 border-2 border-black font-bold flex items-center gap-2 hover:bg-blue-50">
+                                    <MessageCircle size={16} />
+                                    Chat
                                 </Button>
                             </Link>
                             <form action="/auth/signout" method="post" className="hidden sm:block">
