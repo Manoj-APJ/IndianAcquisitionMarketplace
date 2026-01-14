@@ -302,7 +302,7 @@ function FeaturesSection() {
                         Trust & Security
                     </span>
                     <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-6">
-                        Built for <span className="text-emerald-600 italic">Serious</span> Founders
+                        Built for Business Acquisitions
                     </h2>
                 </div>
 

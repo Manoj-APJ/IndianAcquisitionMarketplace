@@ -9,7 +9,7 @@ import { ConditionalWrapper } from "@/components/ConditionalWrapper";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    title: "AcquireX | Premium Digital Asset Marketplace",
+    title: "AcquireX | Digital Asset Marketplace",
     description: "The trusted marketplace for buying and selling verified digital businesses, SaaS platforms, and newsletters.",
 };
 
