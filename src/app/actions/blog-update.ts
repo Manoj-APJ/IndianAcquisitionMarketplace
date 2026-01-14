@@ -16,13 +16,15 @@ export async function updateBlog(id: string, prevState: any, formData: FormData)
     const content = formData.get("content") as string;
     const status = formData.get("status") as string;
     const cover_image = formData.get("cover_image") as string;
+    const category = formData.get("category") as string;
 
     if (!title || title.length < 5) return { error: "Title too short" };
+    if (!category) return { error: "Category is required" };
 
     const { error } = await supabase
         .from('blogs')
         .update({
-            title, slug, excerpt, content, status, cover_image,
+            title, slug, excerpt, content, status, cover_image, category,
             updated_at: new Date().toISOString()
         })
         .eq('id', id);

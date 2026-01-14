@@ -65,14 +65,31 @@ export function EditBlogForm({ blog }: EditFormProps) {
                 </div>
             </div>
 
-            <div>
-                <label className="block text-sm font-bold uppercase mb-2">Cover Image URL</label>
-                <input
-                    name="cover_image"
-                    defaultValue={blog.cover_image}
-                    placeholder="https://..."
-                    className="w-full border-2 border-black p-3 font-medium focus:ring-4 ring-blue-500/20 outline-none transition-all"
-                />
+            <div className="grid grid-cols-2 gap-6">
+                <div>
+                    <label className="block text-sm font-bold uppercase mb-2">Category</label>
+                    <select
+                        name="category"
+                        defaultValue={blog.category}
+                        required
+                        className="w-full border-2 border-black p-3 font-medium bg-white focus:ring-4 ring-blue-500/20 outline-none transition-all"
+                    >
+                        <option value="Valuation">Valuation</option>
+                        <option value="Acquisition">Acquisition</option>
+                        <option value="Growth">Growth</option>
+                        <option value="Case Study">Case Study</option>
+                        <option value="Market Trends">Market Trends</option>
+                    </select>
+                </div>
+                <div>
+                    <label className="block text-sm font-bold uppercase mb-2">Cover Image URL</label>
+                    <input
+                        name="cover_image"
+                        defaultValue={blog.cover_image}
+                        placeholder="https://..."
+                        className="w-full border-2 border-black p-3 font-medium focus:ring-4 ring-blue-500/20 outline-none transition-all"
+                    />
+                </div>
             </div>
 
             <div>

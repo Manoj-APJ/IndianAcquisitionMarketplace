@@ -35,6 +35,7 @@ export default async function AdminBlogPage() {
                     <thead className="bg-black text-white">
                         <tr>
                             <th className="p-4 font-bold uppercase text-sm">Title</th>
+                            <th className="p-4 font-bold uppercase text-sm">Category</th>
                             <th className="p-4 font-bold uppercase text-sm">Status</th>
                             <th className="p-4 font-bold uppercase text-sm">Date</th>
                             <th className="p-4 font-bold uppercase text-sm text-right">Actions</th>
@@ -44,6 +45,7 @@ export default async function AdminBlogPage() {
                         {blogs?.map((blog) => (
                             <tr key={blog.id} className="hover:bg-gray-50">
                                 <td className="p-4 font-bold">{blog.title}</td>
+                                <td className="p-4 text-sm font-bold uppercase text-gray-400">{blog.category || '-'}</td>
                                 <td className="p-4">
                                     <span className={`px-2 py-1 text-xs font-black uppercase border-2 ${blog.status === 'published'
                                         ? 'bg-green-100 text-green-800 border-green-600'

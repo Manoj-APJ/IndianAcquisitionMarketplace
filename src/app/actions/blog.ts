@@ -11,6 +11,7 @@ function validateBlogData(data: any) {
     if (!data.excerpt || data.excerpt.length < 10) errors.push("Excerpt must be at least 10 characters.");
     if (!data.content || data.content.length < 50) errors.push("Content must be at least 50 characters.");
     if (data.status !== "draft" && data.status !== "published") errors.push("Invalid status.");
+    if (!data.category) errors.push("Category is required.");
     return errors;
 }
 
@@ -28,6 +29,7 @@ export async function createBlog(prevState: any, formData: FormData) {
         content: formData.get("content") as string,
         cover_image: formData.get("cover_image") as string,
         status: formData.get("status") as string,
+        category: formData.get("category") as string,
     };
 
     const validationErrors = validateBlogData(rawData);

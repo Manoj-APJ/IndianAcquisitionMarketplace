@@ -476,6 +476,13 @@ function BlogSection({ blogs }: { blogs: any[] | null }) {
                                     )}
                                 </div>
                                 <div className="p-6 flex-1 flex flex-col">
+                                    {blog.category && (
+                                        <div className="mb-2">
+                                            <span className="text-[10px] font-black uppercase tracking-widest text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
+                                                {blog.category}
+                                            </span>
+                                        </div>
+                                    )}
                                     <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-emerald-600 transition-colors">
                                         {blog.title}
                                     </h3>

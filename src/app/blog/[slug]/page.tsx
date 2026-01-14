@@ -33,11 +33,16 @@ export default async function BlogPostPage({ params }: PageProps) {
                 </Link>
 
                 <article className="prose prose-lg prose-headings:font-black prose-a:text-blue-600 prose-img:border-2 prose-img:border-black prose-img:shadow-neo max-w-none">
+                    <div className="mb-4">
+                        <span className="bg-blue-600 text-white px-3 py-1 text-xs font-black uppercase tracking-tighter border-2 border-black shadow-[2px_2px_0_0_#000]">
+                            {post.category || 'Opinion'}
+                        </span>
+                    </div>
                     <h1 className="text-4xl md:text-5xl mb-4 leading-tight">{post.title}</h1>
                     <div className="flex items-center gap-4 text-sm font-bold text-gray-500 mb-8 border-b-2 border-gray-100 pb-8">
                         <span>{new Date(post.published_at).toLocaleDateString()}</span>
                         <span>•</span>
-                        <span>By {post.profiles?.full_name || 'MarketX Team'}</span>
+                        <span>By {post.profiles?.full_name || 'AcquireX Team'}</span>
                     </div>
 
                     {post.cover_image && (
