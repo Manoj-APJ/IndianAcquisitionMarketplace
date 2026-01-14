@@ -4,20 +4,21 @@ import { cn } from "@/lib/utils";
 interface BadgeProps {
     children: React.ReactNode;
     className?: string;
-    color?: "blue" | "green" | "yellow" | "gray" | "amber";
+    color?: "violet" | "blue" | "green" | "yellow" | "gray" | "amber";
 }
 
 export const Badge: React.FC<BadgeProps> = ({ children, className, color = "gray" }) => {
     return (
         <span
             className={cn(
-                "inline-flex items-center border-2 border-black px-2.5 py-0.5 text-xs font-bold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+                "inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-medium transition-colors",
                 {
-                    "bg-blue-100": color === "blue",
-                    "bg-green-100": color === "green",
-                    "bg-yellow-100": color === "yellow",
-                    "bg-gray-100": color === "gray",
-                    "bg-amber-400": color === "amber",
+                    "bg-violet-50 text-violet-700": color === "violet",
+                    "bg-blue-50 text-blue-700": color === "blue",
+                    "bg-green-50 text-green-700": color === "green",
+                    "bg-yellow-50 text-yellow-700": color === "yellow",
+                    "bg-gray-100 text-gray-700": color === "gray",
+                    "bg-amber-50 text-amber-700": color === "amber",
                 },
                 className
             )}

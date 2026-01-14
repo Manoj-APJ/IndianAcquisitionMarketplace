@@ -1,11 +1,8 @@
 "use client";
 import { Button } from "@/components/ui/Button";
 import { updateOfferStatus } from "@/app/actions/offers";
-// import { Offer } from "@/types/database"; // Avoiding import issues if types not perfectly aligned in client
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { MessageCircle } from "lucide-react";
-import Link from "next/link";
 import { getOrCreateConversation } from "@/app/actions/chat";
 
 export function OfferActionButtons({ offer, isSeller }: { offer: any, isSeller: boolean }) {
@@ -35,15 +32,45 @@ export function OfferActionButtons({ offer, isSeller }: { offer: any, isSeller: 
     }
 
     return (
-        <div className="flex gap-2 mt-2">
+        <div className="flex gap-2 flex-wrap">
             {isSeller ? (
                 <>
-                    <Button size="sm" onClick={() => handleUpdate('accepted')} disabled={loading} className="bg-green-500 hover:bg-green-600 text-white border-2 border-black font-bold shadow-neo-sm">Accept</Button>
-                    <Button size="sm" onClick={() => handleUpdate('rejected')} disabled={loading} className="bg-red-500 hover:bg-red-600 text-white border-2 border-black font-bold shadow-neo-sm">Reject</Button>
-                    <Button size="sm" onClick={handleChat} disabled={loading} variant="outline" className="border-2 border-black font-bold shadow-neo-sm">Counter (Chat)</Button>
+                    <Button
+                        size="sm"
+                        onClick={() => handleUpdate('accepted')}
+                        disabled={loading}
+                        className="bg-green-600 hover:bg-green-700 text-white rounded-lg"
+                    >
+                        Accept
+                    </Button>
+                    <Button
+                        size="sm"
+                        onClick={() => handleUpdate('rejected')}
+                        disabled={loading}
+                        className="bg-red-600 hover:bg-red-700 text-white rounded-lg"
+                    >
+                        Reject
+                    </Button>
+                    <Button
+                        size="sm"
+                        onClick={handleChat}
+                        disabled={loading}
+                        variant="outline"
+                        className="rounded-lg border-gray-200"
+                    >
+                        Counter
+                    </Button>
                 </>
             ) : (
-                <Button size="sm" onClick={() => handleUpdate('withdrawn')} disabled={loading} variant="outline" className="border-2 border-black font-bold shadow-neo-sm hover:bg-red-50 hover:text-red-600 hover:border-red-600">Withdraw</Button>
+                <Button
+                    size="sm"
+                    onClick={() => handleUpdate('withdrawn')}
+                    disabled={loading}
+                    variant="outline"
+                    className="rounded-lg border-gray-200 hover:bg-red-50 hover:text-red-600 hover:border-red-200"
+                >
+                    Withdraw
+                </Button>
             )}
         </div>
     );

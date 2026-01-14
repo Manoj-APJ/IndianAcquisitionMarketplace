@@ -78,6 +78,10 @@ export function HowItWorksSection() {
                 {/* Section Header */}
                 <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-8">
                     <div className="max-w-2xl">
+                        <div className="flex items-center gap-2 mb-4">
+                            <div className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
+                            <span className="text-xs font-black uppercase tracking-[0.2em] text-blue-600">The MarketX Deal-Flow</span>
+                        </div>
                         <h2 className="text-4xl md:text-6xl font-black mb-6 uppercase tracking-tighter">
                             How it <span className="text-blue-600">works</span>
                         </h2>

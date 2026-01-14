@@ -16,12 +16,6 @@ export function FavoriteButton({ listingId, initialIsFavorite, isLoggedIn }: Fav
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
 
-    // Optimistic UI could be handled with useOptimistic in React 19 / Next 14, 
-    // but standard state or just relying on server revalidation + fast transition is ok for now.
-    // For immediate feedback, we'll assume success, but standard props are safer without complex state.
-    // Let's stick to the prop for truth but allow immediate visual toggle if we wrapped this in local state.
-    // We'll trust revalidatePath for now to keep it simple.
-
     const handleClick = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
@@ -41,11 +35,13 @@ export function FavoriteButton({ listingId, initialIsFavorite, isLoggedIn }: Fav
             onClick={handleClick}
             disabled={isPending}
             className={cn(
-                "p-2 rounded-full border-2 border-black transition-all hover:scale-110 active:scale-95",
-                initialIsFavorite ? "bg-red-500 text-white" : "bg-white text-gray-400 hover:text-red-500 hover:border-red-500"
+                "p-2 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-soft",
+                initialIsFavorite
+                    ? "bg-red-500 text-white"
+                    : "bg-white/90 backdrop-blur-sm text-gray-400 hover:text-red-500 border border-gray-100"
             )}
         >
-            <Heart size={20} fill={initialIsFavorite ? "currentColor" : "none"} />
+            <Heart size={18} fill={initialIsFavorite ? "currentColor" : "none"} />
         </button>
     );
 }

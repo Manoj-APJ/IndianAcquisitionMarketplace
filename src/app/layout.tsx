@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google"; // or import local if needed, but google font is better
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { cn } from "@/lib/utils";
+import { ConditionalWrapper } from "@/components/ConditionalWrapper";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    title: "MarketX | Buy & Sell Digital Assets",
-    description: "The marketplace for indie founders to buy vsell micro-SaaS, newsletters, and side-projects.",
+    title: "AcquireX | Premium Digital Asset Marketplace",
+    description: "The trusted marketplace for buying and selling verified digital businesses, SaaS platforms, and newsletters.",
 };
 
 export default function RootLayout({
@@ -19,15 +20,16 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={cn( // Modified body className
+            <body className={cn(
                 "min-h-screen bg-background font-sans antialiased",
                 inter.className
             )}>
-                <Navbar />
-                <main className="min-h-screen"> {/* Modified main className */}
+                <ConditionalWrapper
+                    navbar={<Navbar />}
+                    footer={<Footer />}
+                >
                     {children}
-                </main>
-                <Footer /> {/* Replaced footer tag with Footer component */}
+                </ConditionalWrapper>
             </body>
         </html>
     );

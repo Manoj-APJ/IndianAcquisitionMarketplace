@@ -1,17 +1,21 @@
-import Link from "next/link";
 import { Button } from "@/components/ui/Button";
+import Link from "next/link";
 
 export default function NotFound() {
     return (
-        <div className="container mx-auto px-4 py-20 text-center">
-            <h1 className="text-9xl font-black mb-4">404</h1>
-            <h2 className="text-3xl font-bold mb-8">Page Not Found</h2>
-            <p className="text-xl text-gray-600 mb-12 max-w-lg mx-auto">
-                The asset you are looking for might have been sold or never existed.
-            </p>
-            <Link href="/">
-                <Button size="lg">Return Home</Button>
-            </Link>
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+            <div className="text-center max-w-md">
+                <h1 className="text-6xl font-bold text-gray-200 mb-4">404</h1>
+                <h2 className="text-xl font-bold text-gray-900 mb-3">Page not found</h2>
+                <p className="text-gray-500 mb-8">
+                    The page you're looking for doesn't exist or has been moved.
+                </p>
+                <Link href="/">
+                    <Button className="bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-xl">
+                        Back to Home
+                    </Button>
+                </Link>
+            </div>
         </div>
     );
 }

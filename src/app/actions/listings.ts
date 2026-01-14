@@ -30,7 +30,7 @@ export async function submitListing(prevState: any, formData: FormData) {
         monthly_revenue: Number(formData.get("revenue")),
         short_description: formData.get("short_description") as string,
         description: description,
-        tech_stack: (formData.get("tech_stack") as string).split(',').map(s => s.trim()).filter(Boolean),
+        tech_stack: (formData.get("tech_stack") as string || "").split(',').map(s => s.trim()).filter(Boolean),
         founded_date: formData.get("founded_date") as string, // YYYY-MM-DD
         customers_count: Number(formData.get("customers") || 0),
         status: 'submitted',
