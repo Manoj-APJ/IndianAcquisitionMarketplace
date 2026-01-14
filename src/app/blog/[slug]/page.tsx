@@ -42,7 +42,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                     <div className="flex items-center gap-4 text-sm font-bold text-gray-500 mb-8 border-b-2 border-gray-100 pb-8">
                         <span>{new Date(post.published_at).toLocaleDateString()}</span>
                         <span>•</span>
-                        <span>By {post.profiles?.full_name || 'AcquireX Team'}</span>
+                        <span>By {post.profiles?.full_name || 'MarketX Team'}</span>
                     </div>
 
                     {post.cover_image && (

@@ -20,31 +20,31 @@ export const FAQS = [
 export const COMPARISON_DATA = [
     {
         feature: "Success Fees / Commission",
-        acquirex: "0% (Flat Fee)",
+        marketx: "0% (Flat Fee)",
         flippa: "10% + Listing Fee",
         acquire: "4% - 10% on Sale"
     },
     {
         feature: "Proof of Traction",
-        acquirex: "Manual Proof Uploads",
+        marketx: "Manual Proof Uploads",
         flippa: "Self-Reported / Mixed",
         acquire: "Stripe/Bank Connection"
     },
     {
         feature: "Privacy Controls",
-        acquirex: "Strict NDA-Gated",
+        marketx: "Strict NDA-Gated",
         flippa: "Public Information",
         acquire: "Admin-Gated"
     },
     {
         feature: "Vetting Process",
-        acquirex: "Manual Admin Review",
+        marketx: "Manual Admin Review",
         flippa: "Open Marketplace",
         acquire: "Automated + Review"
     },
     {
         feature: "Target Asset Type",
-        acquirex: "Micro-SaaS & Newsletters",
+        marketx: "Micro-SaaS & Newsletters",
         flippa: "Starter Sites & Domains",
         acquire: "Established SaaS"
     },
